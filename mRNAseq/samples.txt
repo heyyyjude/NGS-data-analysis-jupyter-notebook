@@ -1,0 +1,7 @@
+files.name	condition	sample
+9_clamp_0_buffy	before	9
+9_clamp_200_buffy	after	9
+11_15_006_0m_buffy	before	11_15_006
+11_15_006_200m_buffy	after	11_15_006
+12_27_11_clamp_buffy_0	before	12_27_11
+12_27_11_clamp_buffy_200	after	12_27_11
