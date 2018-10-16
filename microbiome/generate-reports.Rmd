@@ -1,0 +1,60 @@
+---
+title: 'some title'
+author: 'jkim'
+output: html_document
+---
+
+
+```{r setup, include=FALSE,  warning=F}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+```{r, echo=FALSE, include=FALSE}
+library("tidyverse")
+final <-read_csv("genus-composition.csv")
+```
+
+
+  
+###장내 세균총 구성비율
+```{r, message=F, warning=F, include=FALSE}
+
+
+individual <-"individual.56"
+group1 <-"Group"
+group2 <- "American"
+
+
+long.sth <- gather(final, key = "Sample", value = "Proportion", -Genus)
+
+Sample <- "Sample"
+long <- long.sth %>% filter(Sample==group1 | Sample==group2 |Sample==individual)
+
+p <- ggplot(long) + geom_bar(aes(x=Sample, y=Proportion, fill=Genus), stat = "identity")+ theme_light() +
+  ylab("Proportion (%)")  + theme(axis.title.y=element_text(size=10), axis.title.x=element_text(size=10)) +
+  theme(text=element_text(size=10))  +  theme(axis.text.x=element_text(size=10)) + xlab("") +
+  theme(axis.text.y=element_text(size=10)) + theme(legend.text=element_text(size=10)) +theme(legend.title=element_text(size=10))
+```
+
+
+```{r, echo=FALSE}
+p
+rnd <- function(num) { return (round(num, 2))}
+wf <- final %>% select_(.dots = list("Genus", group2, group1, individual)) %>% mutate_if(is.numeric,rnd)
+knitr::kable(wf)
+```
+
+
+
+|미생물|설명|
+| --------------------------- | ---------------------------------------------------- |
+|Bacteroides| 저지방 식단의 야채 및 곡물 성분을 소화하는 데 중요한 역할을합니다. 지방을 잘 분해하지 않기 때문에 저지방식 식단을 갖는 사람들에게서 더 많이 발견됩니다.|
+|Prevotella | 섬유질이 풍부한 식사를 한다는 indication이 될 수 있습니다. 육류위주의 식사를 하는 사람에서 덜 발견됩니다.|
+|Faecalibacterium | 복합 탄수화물, 특히 콩류 및 가공되지 않은 전체 곡물과 같은 저항성 전분을 분해하는 일반적인 소화관 미생물입니다.  일부 연구에 의하면 우리의 장에 Faecalibacteria가 있으면 염증성 장 질환 (특히 Crohn 's disease)으로부터 우리를 보호 할 수 있다고 합니다.  |
+|Bifidobacterium | 일반적으로 Bifidobacterium 박테리아는 유아의 건강에 중요한 보조제로 간주되며 해로운 병원성 (질병을 일으키는) 세균의 번식을 예방하는 것으로 알려져 있습니다.  모유는 Bifidobacterium의 발달을 촉진시킬 수 있습니다. 미생물이 성숙함에 따라 Bifidobacterium은 감소하고 성인 장에서 흔히 발견되지만 전반적인 수준은 일반적으로 개체의 총 세균 부하의 3 % 미만을 차지합니다.  |
+|Blautia | 복잡한 탄수화물을 소화하는 데 도움이됩니다. 이 박테리아가 풍부하면 건강한 장에 대한 표시입니다. Blautia 수치는 간 질환 환자, 대장 암 환자, 당뇨병 환자와 비교했을 때 건강한 사람들에게서 증가합니다.|
+|Lachnospiraceae | Lachnospiraceae가 우리의 입과 목에서 가장 흔합니다. 또한 우리가 섬유를 소화할 수 있도록 도와줍니다.|
+
+
+출처 - ubiome
